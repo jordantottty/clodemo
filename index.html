@@ -1,23 +1,121 @@
 <!DOCTYPE html>
 <html lang="en-us">
+
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CLO App</title>
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        background: #CDB5A6;
+      }
+      #gameContainer {
+        width: 100vw;
+        height: 100vh;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      /* try to handle mobile dialog */
+      canvas + * {
+        z-index: 2;
+      }
+      .logo {
+          display: block;
+          max-width: 100vw;
+          max-height: 70vh;
+      }
+
+      .progress {
+          margin: 1.5em;
+          border: 1px solid white;
+          width: 50vw;
+          display: none;
+      }
+      .progress .full {
+          margin: 2px;
+          background: white;
+          height: 1em;
+          transform-origin: top left;
+      }
+
+      #loader {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .spinner,
+      .spinner:after {
+        border-radius: 50%;
+        width: 5em;
+        height: 5em;
+      }
+      .spinner {
+        margin: 10px;
+        font-size: 10px;
+        position: relative;
+        text-indent: -9999em;
+        border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-left: 1.1em solid #ffffff;
+        transform: translateZ(0);
+        animation: spinner-spin 1.1s infinite linear;
+      }
+      @keyframes spinner-spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+    </style>
   </head>
-  <body style="text-align: center">
-    <canvas id="unity-canvas" style="width: 1920px; height: 1080px; background: #807167"></canvas>
-    <script src="Build/Build.loader.js"></script>
-    <script>
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+
+  <body>
+    <canvas id="unity-canvas" style="width: 100vw; height: 100vh; background: #CDB5A6"></canvas>
+    <div id="loader">
+      <div class="spinner"></div>
+      <div class="progress"><div class="full"></div></div>
+    </div>
+  </body>
+
+  <script src="Build/Build.loader.js"></script>
+  <script>
+  
+  var gameInstance = createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Build.data",
         frameworkUrl: "Build/Build.framework.js",
         codeUrl: "Build/Build.wasm",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "Clo",
-        productName: "App",
+        companyName: "DefaultCompany",
+        productName: "Beautify",
         productVersion: "1.0",
-      });
-    </script>
-  </body>
+      }).then((unityInstance) => {
+	  const progress = document.querySelector("#loader .progress");
+      progress.style.display = "block";
+      gameInstance.progress = progress.querySelector(".full");
+      loader.style.display = "none";
+	  });
+  </script>
+
 </html>
+
